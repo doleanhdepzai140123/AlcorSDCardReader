@@ -1,0 +1,22 @@
+# macOS metadata
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.AppleDouble
+
+# Local tooling and editor state
+.vscode/
+.idea/
+
+# Build and diagnostic output
+*.dSYM/
+*.o
+*.log
+*.zip
+Alcor-Windows-Report*.md
+*.DeviceProperties.plist
+build/
+dist/
+*.bak

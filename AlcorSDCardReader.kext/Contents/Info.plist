@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.github.doleanhdepzai140123.AlcorSDCardReader</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>AlcorSDCardReader</string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.0.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>2.0.0</string>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<!--
+		     Tier 1: USB interface -> AppleUSBCardReaderInterfaceNub.
+		     The 94000 probe score was observed on the tested AU6366 system.
+		     Machine-specific ACPI paths are supplied through OpenCore
+		     DeviceProperties and are intentionally omitted from this bundle.
+		     -->
+		<key>AlcorSDCardReader1InterfaceNub</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBCardReader</string>
+			<key>IOClass</key>
+			<string>com_apple_driver_AppleUSBCardReaderInterfaceNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostInterface</string>
+			<key>IOProbeScore</key>
+			<integer>4000</integer>
+			<key>Physical Interconnect Location</key>
+			<string>Internal</string>
+			<key>idVendor</key>
+			<integer>1423</integer>
+			<key>idProduct</key>
+			<integer>25446</integer>
+			<key>bConfigurationValue</key>
+			<integer>1</integer>
+			<key>bInterfaceNumber</key>
+			<integer>0</integer>
+		</dict>
+
+		<!--
+		     Tier 2: AppleUSBCardReaderInterfaceNub -> DriverNub.
+		     The internal-port ACPI requirement and observed scores are based on
+		     reverse engineering of the tested macOS build. The companion SSDT
+		     supplies a no-op SRST for that test system only.
+		     -->
+		<key>AlcorSDCardReader2DriverNub</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBCardReader</string>
+			<key>IOClass</key>
+			<string>com_apple_driver_AppleUSBCardReaderDriverNub</string>
+			<key>IOProviderClass</key>
+			<string>com_apple_driver_AppleUSBCardReaderInterfaceNub</string>
+			<key>IOProbeScore</key>
+			<integer>4000</integer>
+			<key>USB Storage Characteristics</key>
+			<dict>
+				<key>kUSBDisconnectInterval</key>
+				<integer>2000</integer>
+			</dict>
+			<key>idVendor</key>
+			<integer>1423</integer>
+			<key>idProduct</key>
+			<integer>25446</integer>
+			<key>bConfigurationValue</key>
+			<integer>1</integer>
+			<key>bInterfaceNumber</key>
+			<integer>0</integer>
+		</dict>
+
+		<!--
+		     Tier 3: DriverNub -> UMC.
+		     The copied SCSI characteristics and observed competition correspond
+		     to Apple's AU6366-specific entry on the tested macOS build. Do not
+		     reuse them for another controller without validation.
+		     -->
+		<key>AlcorSDCardReader3UMC</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBCardReader</string>
+			<key>IOClass</key>
+			<string>com_apple_driver_AppleUSBCardReaderUMC</string>
+			<key>IOProviderClass</key>
+			<string>com_apple_driver_AppleUSBCardReaderDriverNub</string>
+			<key>IOProbeScore</key>
+			<integer>4000</integer>
+			<key>IOMediaIcon</key>
+			<dict>
+				<key>CFBundleIdentifier</key>
+				<string>com.apple.iokit.IOSCSIArchitectureModelFamily</string>
+				<key>IOBundleResourceFile</key>
+				<string>SD.icns</string>
+			</dict>
+			<!-- Apple reports USB for the tested USB-connected reader. -->
+			<key>Physical Interconnect</key>
+			<string>USB</string>
+			<key>Physical Interconnect Location</key>
+			<string>Internal</string>
+			<key>Read Time Out Duration</key>
+			<integer>30000</integer>
+			<key>Write Time Out Duration</key>
+			<integer>30000</integer>
+			<key>SCSI Device Characteristics</key>
+			<dict>
+				<key>IOMaximumBlockCountRead</key>
+				<integer>128</integer>
+				<key>IOMaximumBlockCountWrite</key>
+				<integer>128</integer>
+				<key>Inquiry Length</key>
+				<integer>36</integer>
+				<key>Manual Eject</key>
+				<string>true</string>
+			</dict>
+			<key>idVendor</key>
+			<integer>1423</integer>
+			<key>idProduct</key>
+			<integer>25446</integer>
+			<key>bConfigurationValue</key>
+			<integer>1</integer>
+			<key>bInterfaceNumber</key>
+			<integer>0</integer>
+		</dict>
+
+		<!--
+		     Tier 4: SCSI logical unit -> AppleUSBCardReaderSBC.
+		     These inquiry strings, including the two spaces in the product name,
+		     were observed from the tested AU6366 firmware. Other Alcor models
+		     need their own inquiry data and validation.
+		     -->
+		<key>AlcorSDCardReader4SBC</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBCardReader</string>
+			<key>IOClass</key>
+			<string>com_apple_driver_AppleUSBCardReaderSBC</string>
+			<key>IOProviderClass</key>
+			<string>IOSCSILogicalUnitNub</string>
+			<key>IOProbeScore</key>
+			<integer>4000</integer>
+			<key>Peripheral Device Type</key>
+			<integer>0</integer>
+			<key>Physical Interconnect</key>
+			<string>USB</string>
+			<key>Vendor Identification</key>
+			<string>Multiple</string>
+			<key>Product Identification</key>
+			<string>Card  Reader</string>
+		</dict>
+	</dict>
+</dict>
+</plist>
