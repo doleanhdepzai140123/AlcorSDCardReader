@@ -8,6 +8,7 @@
 ![OpenCore](https://img.shields.io/badge/bootloader-OpenCore-blue)
 ![AU6366](https://img.shields.io/badge/verified-Alcor%20AU6366-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-green)
+![Written by humans, not AI](https://img.shields.io/badge/written_by_humans-not_ai-red)
 
 [Getting started](#getting-started) · [OCAT guide](docs/INSTALLATION_OCAT.md) · [Reader profiles](profiles/README.md) · [Contribute](CONTRIBUTING.md)
 
